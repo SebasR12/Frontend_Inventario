@@ -1,18 +1,37 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="layout-container">
-    <!-- Barra superior -->
+    <!-- HEADER -->
     <header class="topbar">
-        <h1 class="dashboard-title">Dashboard</h1>
+        <div class="logo">
+            <i class="bi bi-speedometer2"></i>
+            <span>Dashboard</span>
+        </div>
+
+        <button class="menu-toggle d-md-none" @onclick="ToggleSidebar">
+            <i class="bi bi-list"></i>
+        </button>
     </header>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
+    <!-- SIDEBAR -->
+    <aside class="@SidebarClass">
         <NavMenu />
-    </div>
+    </aside>
 
-    <!-- Contenido principal -->
+    <!-- CONTENIDO PRINCIPAL -->
     <main class="main-content">
-        @Body
+        <div class="content-body">
+            @Body
+        </div>
     </main>
 </div>
+
+@code {
+    private bool sidebarOpen = true;
+    private string SidebarClass => sidebarOpen ? "sidebar open" : "sidebar closed";
+
+    private void ToggleSidebar()
+    {
+        sidebarOpen = !sidebarOpen;
+    }
+}

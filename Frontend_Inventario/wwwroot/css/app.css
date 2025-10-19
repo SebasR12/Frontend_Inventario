@@ -1,3 +1,112 @@
+/* ================= Base Styles ================= */
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+h1:focus {
+    outline: none;
+}
+
+a, .btn-link {
+    color: #0071c1;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+.content {
+    padding-top: 1.1rem;
+}
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
+/* ================= Error UI ================= */
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+
+.blazor-error-boundary {
+    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHhtbG5zPSJod...) no-repeat 1rem/1.8rem, #b32121;
+    padding: 1rem 1rem 1rem 3.7rem;
+    color: white;
+}
+
+    .blazor-error-boundary::after {
+        content: "An error has occurred.";
+    }
+
+/* ================= Loading ================= */
+.loading-progress {
+    position: relative;
+    display: block;
+    width: 8rem;
+    height: 8rem;
+    margin: 20vh auto 1rem auto;
+}
+
+    .loading-progress circle {
+        fill: none;
+        stroke: #e0e0e0;
+        stroke-width: 0.6rem;
+        transform-origin: 50% 50%;
+        transform: rotate(-90deg);
+    }
+
+        .loading-progress circle:last-child {
+            stroke: #1b6ec2;
+            stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
+            transition: stroke-dasharray 0.05s ease-in-out;
+        }
+
+.loading-progress-text {
+    position: absolute;
+    text-align: center;
+    font-weight: bold;
+    inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
+}
+
+    .loading-progress-text:after {
+        content: var(--blazor-load-percentage-text, "Loading");
+    }
+
+code {
+    color: #c02d76;
+}
+
+/* ================= Dashboard Styles ================= */
+
 /* === LAYOUT GENERAL === */
 .layout-container {
     display: grid;
@@ -39,11 +148,12 @@
     letter-spacing: 1px;
 }
 
-.logo span {
-    background: linear-gradient(90deg, #ffffff, #a8c9ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+    .logo span {
+        background: linear-gradient(90deg, #ffffff, #a8c9ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: fadeIn 1s ease-in;
+    }
 
 .menu-toggle {
     background: none;
@@ -67,19 +177,36 @@
     border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.sidebar::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at top, rgba(0, 100, 255, 0.1), transparent 70%);
-    pointer-events: none;
-}
+    .sidebar:hover {
+        width: 250px;
+    }
 
-.sidebar:hover {
-    width: 250px;
+    /* === EFECTO DE BRILLO === */
+    .sidebar::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -150%;
+        width: 150%;
+        height: 100%;
+        background: linear-gradient(120deg, transparent, rgba(0, 102, 255, 0.25), transparent);
+        transform: skewX(-20deg);
+        animation: sidebarShine 6s infinite linear;
+        pointer-events: none;
+    }
+
+@keyframes sidebarShine {
+    0% {
+        left: -150%;
+    }
+
+    50% {
+        left: 150%;
+    }
+
+    100% {
+        left: 150%;
+    }
 }
 
 /* === NAV MENU === */
@@ -105,16 +232,15 @@
     white-space: nowrap;
     transition: all 0.3s ease;
     position: relative;
-    overflow: hidden;
 }
 
-.nav-item i {
-    font-size: 1.4rem;
-    min-width: 36px;
-    text-align: center;
-    color: #8ab4f8;
-    transition: all 0.3s ease;
-}
+    .nav-item i {
+        font-size: 1.4rem;
+        min-width: 36px;
+        text-align: center;
+        color: #8ab4f8;
+        transition: all 0.3s ease;
+    }
 
 /* Ocultar texto al colapsar */
 .sidebar:not(:hover) .nav-item span {
@@ -153,10 +279,10 @@
     box-shadow: inset 0 0 10px rgba(0, 140, 255, 0.3);
 }
 
-.nav-item:hover i {
-    color: #ffffff;
-    text-shadow: 0 0 10px #6bb5ff;
-}
+    .nav-item:hover i {
+        color: #ffffff;
+        text-shadow: 0 0 10px #6bb5ff;
+    }
 
 /* Activo */
 .nav-item.active {
@@ -165,14 +291,16 @@
     box-shadow: 0 0 15px rgba(0, 102, 255, 0.6);
 }
 
-.nav-item.active i {
-    color: #fff;
-}
+    .nav-item.active i {
+        color: #fff;
+        text-shadow: 0 0 12px #00aaff, 0 0 24px #0080ff;
+    }
 
 /* Scroll personalizado */
 .nav-menu::-webkit-scrollbar {
     width: 6px;
 }
+
 .nav-menu::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.15);
     border-radius: 5px;
@@ -187,6 +315,7 @@
     color: #333;
     transition: margin-left 0.4s ease;
     border-radius: 10px 0 0 0;
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Ajuste cuando el sidebar se expande */
@@ -209,6 +338,7 @@
         transform: translateY(20px);
         opacity: 0;
     }
+
     100% {
         transform: translateY(0);
         opacity: 1;
@@ -220,9 +350,22 @@
         transform: translateY(-10px);
         opacity: 0;
     }
+
     100% {
         transform: translateY(0);
         opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
     }
 }
 
@@ -240,9 +383,9 @@
         z-index: 100;
     }
 
-    .sidebar:hover ~ .main-content {
-        margin-left: 0;
-    }
+        .sidebar:hover ~ .main-content {
+            margin-left: 0;
+        }
 
     .main-content {
         padding: 1rem;
