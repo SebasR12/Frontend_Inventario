@@ -1,7 +1,45 @@
 ﻿@page "/"
+@layout MainLayout
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Inicio</PageTitle>
 
-<h1>Hello, world!</h1>
+<link href="css/home.css" rel="stylesheet" />
 
-Welcome to your new app.
+<div class="home-container">
+    <div class="welcome-card">
+        <h1 class="titulo">👋 Bienvenido al Sistema de Inventario</h1>
+
+        <p class="descripcion">
+            Administra y controla tu inventario con precisión, eficiencia y estilo profesional.
+            Gestiona productos, almacenes y usuarios desde un entorno moderno.
+        </p>
+
+        <div class="home-stats">
+            <div class="stat">
+                <i class="bi bi-box-seam"></i>
+                <h3>Gestión de Productos</h3>
+                <p>Agrega, edita y controla tu stockl.</p>
+            </div>
+
+            <div class="stat">
+                <i class="bi bi-journal-code"></i>
+                <h3>Movimientos</h3>
+                <p>Organiza inventarios por ubicación o departamento.</p>
+            </div>
+
+            <div class="stat">
+                <i class="bi bi-people"></i>
+                <h3>Usuarios</h3>
+                <p>Administra roles, accesos y permisos fácilmente.</p>
+            </div>
+
+           
+        </div>
+
+        <div class="quick-actions">
+            <a href="/productos"><i class="bi bi-box"></i> Ir a Productos</a>
+            <a href="/almacenes"><i class="bi bi-building"></i> Ver Almacenes</a>
+            <a href="/Lista_Usuario"><i class="bi bi-person-badge"></i> Administrar Usuarios</a>
+        </div>
+    </div>
+</div>
