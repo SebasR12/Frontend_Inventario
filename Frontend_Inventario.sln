@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36121.58 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend_Inventario", "Frontend_Inventario\Frontend_Inventario.csproj", "{2C1D2782-1E81-4250-8ECA-C37431599882}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaInventario_API", "..\SistemaInventario_API\SistemaInventario_API\SistemaInventario_API.csproj", "{ADBCB96F-C455-F8B8-2A3F-AB5C79F5BBDC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2C1D2782-1E81-4250-8ECA-C37431599882}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C1D2782-1E81-4250-8ECA-C37431599882}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C1D2782-1E81-4250-8ECA-C37431599882}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C1D2782-1E81-4250-8ECA-C37431599882}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADBCB96F-C455-F8B8-2A3F-AB5C79F5BBDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADBCB96F-C455-F8B8-2A3F-AB5C79F5BBDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADBCB96F-C455-F8B8-2A3F-AB5C79F5BBDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADBCB96F-C455-F8B8-2A3F-AB5C79F5BBDC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3D9B9386-B0E6-4B6A-AEDE-572FB2E86A5C}
+	EndGlobalSection
+EndGlobal

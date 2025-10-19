@@ -1,0 +1,119 @@
+﻿@page "/Lista_Usuario"
+@using Frontend_Inventario.Modelos
+@using Frontend_Inventario.Servicios
+@using Frontend_Inventario.Servicios.iServicios
+
+@inject Usuario_Interface servicioUsuario
+
+<div class="row animated fadeIn fast">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-0 shadow-sm rounded-start" placeholder="Buscar...." />
+                    </div>
+
+                    <NavLink href="Registrar_Usuario" class="btn btn-primary rounded-pill shadow-sm ms-3 px-4">
+                        <i class="bi bi-person-fill-add"></i> Nuevo
+                    </NavLink>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body">
+                <h4 class="card-title">Usuarios</h4>
+                <h6 class="card-subtitle mb-3 text-muted">Usuarios registrados en el sistema</h6>
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>idUsuario</th>
+                                <th>nombre</th>
+                                <th>correo</th>
+                                <th>contrasena</th>
+                                <th>idRol</th>
+                                <th>estado</th>
+                                <th>fechaRegistro</th>
+                                <th>intentosLogin</th>
+                                <th class="text-center text-nowrap">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (usuario_Modelo_Respuestas.Count() > 0)
+                            {
+                                @foreach(var item in usuario_Modelo_Respuestas)
+                                {
+                                    <tr>
+                                        <td>@item.idUsuario</td>
+                                        <td>@item.nombre</td>
+                                        <td>@item.correo</td>
+                                        <td>@item.contrasena</td>                                        
+                                        <td>@item.idRol</td>
+                                        <td>@item.estado</td>
+                                        <td>@item.fechaRegistro</td>
+                                        <td>@item.intentosLogin</td>
+                                        <td class="text-center text-nowrap">
+                                            <NavLink href=@($"Registrar_Usuario/{item.idUsuario}")
+                                                class="btn btn-warning rounded-circle shadow-sm"
+                                                data-bs-toggle="tooltip" data-bs-placement="top" title="Modificar">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </NavLink>
+                                    <button class="btn btn-danger rounded-circle shadow-sm ms-2"
+                                                    @onclick="() => Eliminar_Usuario(item.idUsuario)"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="9" class="text-center text-muted">No hay registros disponibles</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-center mt-3 gap-2">
+                    <button class="btn btn-secondary rounded-pill px-4">Anteriores</button>
+                    <button class="btn btn-secondary rounded-pill px-4">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+   
+
+@code {
+
+    public IEnumerable<Usuario_Modelo_Respuesta> usuario_Modelo_Respuestas { get; set; } = new List<Usuario_Modelo_Respuesta>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        usuario_Modelo_Respuestas = await servicioUsuario.Get_Usuarios();
+    }
+
+    public async Task Eliminar_Usuario(int idUsuario)
+    {
+        await servicioUsuario.Eliminar_Usuario(idUsuario);
+        usuario_Modelo_Respuestas = await servicioUsuario.Get_Usuarios();
+    }
+}

@@ -1,0 +1,27 @@
+﻿<div class="nav-menu">
+    @foreach (var item in MenuItems)
+    {
+        <NavLink class="nav-item" href="@item.Href" Match="@item.Match">
+            <i class="@item.Icon"></i>
+            <span>@item.Text</span>
+        </NavLink>
+    }
+</div>
+
+@code {
+    private List<MenuItem> MenuItems = new()
+    {
+        new MenuItem("Inicio", "", "bi bi-house-fill", NavLinkMatch.All),
+        new MenuItem("Usuarios", "Lista_Usuario", "bi bi-person-lines-fill"),
+        new MenuItem("Productos", "Lista_Productos", "bi bi-box-seam"),
+        new MenuItem("Movimientos", "Lista_Movimientos", "bi bi-arrow-left-right"),
+        new MenuItem("Historial", "Lista_Historial", "bi bi-clock-history"),
+        new MenuItem("Categorías", "Lista_Categorias", "bi bi-tags-fill"),
+        new MenuItem("Proveedores", "Lista_Proveedores", "bi bi-truck"),
+        new MenuItem("Facturas", "Lista_Facturas", "bi bi-receipt"),
+        new MenuItem("Roles", "Lista_Roles", "bi bi-shield-lock"),
+        new MenuItem("Clientes", "Lista_Clientes", "bi bi-people")
+    };
+
+    public record MenuItem(string Text, string Href, string Icon, NavLinkMatch Match = NavLinkMatch.Prefix);
+}

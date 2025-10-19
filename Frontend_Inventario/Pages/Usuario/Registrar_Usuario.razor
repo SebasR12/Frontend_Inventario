@@ -1,0 +1,152 @@
+﻿@page "/Registrar_Usuario/{idUsuario:int?}"
+@using Frontend_Inventario.Modelos
+@using Frontend_Inventario.Servicios
+@using Frontend_Inventario.Servicios.iServicios
+
+@inject Usuario_Interface servicioUsuario
+@inject NavigationManager navigationManager
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg rounded-4 border-0">
+                <!-- Header -->
+                <div class="card-header bg-gradient-info text-center rounded-top-4">
+                    <h4 class="mb-0 text-dark">Registro de Usuario</h4>
+                </div>
+
+                <div class="card-body p-5">
+                    <EditForm Model="usuario_Modelo_Peticion" OnValidSubmit="@(() => GuardarUsuario())" class="row g-4">
+
+                        <!-- Nombre -->
+                        <div class="col-md-6">
+                            <label for="nombre" class="form-label fw-semibold">Nombre</label>
+                            <InputText @bind-Value="usuario_Modelo_Peticion.nombre"
+                                       class="form-control form-control-lg shadow-sm"
+                                       id="nombre"
+                                       placeholder="Ingrese nombre" />
+                        </div>
+
+                        <!-- Correo -->
+                        <div class="col-md-6">
+                            <label for="correo" class="form-label fw-semibold">Correo</label>
+                            <InputText @bind-Value="usuario_Modelo_Peticion.correo"
+                                       class="form-control form-control-lg shadow-sm"
+                                       id="correo"
+                                       placeholder="correo@mail.com" />
+                        </div>
+
+                        <!-- Contraseña -->
+                        <div class="col-12">
+                            <label for="contrasena" class="form-label fw-semibold">Contraseña</label>
+                            <InputText @bind-Value="usuario_Modelo_Peticion.contrasena"
+                                       class="form-control form-control-lg shadow-sm"
+                                       id="contrasena"
+                                       placeholder="Ingrese contraseña" />
+                        </div>
+
+                        <!-- IdRol -->
+                        <div class="col-12">
+                            <label for="idRol" class="form-label fw-semibold">ID Rol</label>
+                            <InputNumber @bind-Value="usuario_Modelo_Peticion.idRol"
+                                         class="form-control form-control-lg shadow-sm"
+                                         id="idRol"
+                                         placeholder="Ingrese el ID del rol" />
+                        </div>
+
+                        <!-- Estado -->
+                        <div class="col-md-6">
+                            <label for="estado" class="form-label fw-semibold">Estado</label>
+                            <InputNumber @bind-Value="usuario_Modelo_Peticion.estado"
+                                         class="form-control form-control-lg shadow-sm"
+                                         id="estado"
+                                         placeholder="Ingrese estado (1 o 0)" />
+                        </div>
+
+                        <hr />
+
+                        <!-- Botones -->
+                        <div class="col-12 text-center mt-4">
+                            <NavLink href="Lista_Usuario"
+                                     class="btn btn-outline-secondary rounded-pill shadow-sm px-5 me-2">
+                                <i class="bi bi-backspace-fill me-2"></i> Volver
+                            </NavLink>
+
+                            <button type="submit"
+                                    class="btn btn-primary rounded-pill shadow-sm px-5">
+                                <i class="bi bi-floppy-fill me-2"></i> Guardar
+                            </button>
+                        </div>
+
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    private Usuario_Modelo_Peticion usuario_Modelo_Peticion { get; set; } = new Usuario_Modelo_Peticion();
+
+    [Parameter]
+    public int? idUsuario { get; set; } 
+
+
+    private async Task GuardarUsuario()
+    {
+
+        if (usuario_Modelo_Peticion.idUsuario > 0)
+        {
+            usuario_Modelo_Peticion.proceso = 2;
+            var respuesta = await servicioUsuario.Editar_Usuario(usuario_Modelo_Peticion);
+
+        }
+        else
+        {
+            usuario_Modelo_Peticion.proceso = 1; // 1 para crear, 2 para actualizar
+            usuario_Modelo_Peticion.idUsuario = 0; // 0 para crear nuevo usuario
+            var respuesta = await servicioUsuario.Crear_Usuario(usuario_Modelo_Peticion);
+        }
+        navigationManager.NavigateTo("Lista_Usuario");
+    } 
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (idUsuario.HasValue && idUsuario.Value > 0)
+        {
+            var response = await servicioUsuario.Get_Usuario_Id(idUsuario.Value);
+            if (response != null)
+            {
+                usuario_Modelo_Peticion.idUsuario = response.ContainsKey("idUsuario")
+                ? Convert.ToInt32(response["idUsuario"])
+                : 0;
+
+                usuario_Modelo_Peticion.nombre = response.ContainsKey("nombre")
+                ? response["nombre"].ToString()
+                : string.Empty;
+
+                usuario_Modelo_Peticion.correo = response.ContainsKey("correo")
+                ? response["correo"].ToString()
+                : string.Empty;
+
+                usuario_Modelo_Peticion.contrasena = response.ContainsKey("contrasena")
+                ? response["contrasena"].ToString()
+                : string.Empty;
+
+                usuario_Modelo_Peticion.idRol = response.ContainsKey("idRol")
+                ? Convert.ToInt32(response["idRol"])
+                : 0;
+
+                usuario_Modelo_Peticion.estado = response.ContainsKey("estado")
+                ? Convert.ToInt32(response["estado"])
+                : 0;
+            }
+            else
+            {
+                Console.WriteLine("No se encontró el usuario con el ID proporcionado.");
+            }
+        }
+    }
+}
