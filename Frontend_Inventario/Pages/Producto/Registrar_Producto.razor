@@ -6,63 +6,110 @@
 @inject Producto_Interface servicioProducto
 @inject NavigationManager navigationManager
 
-<div class="row">
-    <div class="col-lg-12">
-        <br />
-        <div class="card">
-            <div class="card-header bg-info">
-                <h4 class="m-b-0 text-white">Registro de productos</h4>
-            </div>
-            <div class="card-body">
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg rounded-4 border-0">
+                <!-- Header con gradiente -->
+                <div class="card-header text-center text-white rounded-top-4"
+                     style="background: linear-gradient(90deg, #1e3c72, #2a5298);">
+                    <h4 class="mb-0 fw-bold">Registro de Productos</h4>
+                </div>
 
-                <EditForm Model="producto_Modelo_Peticion" OnValidSubmit="@(() => GuardarProducto())" class="row g-3">
+                <div class="card-body p-5">
+                    <EditForm Model="producto_Modelo_Peticion" OnValidSubmit="@(() => GuardarProducto())" class="row g-4">
 
-                    <div class="col-md-6">
-                        <label for="nombreProducto" class="form-label">Nombre</label>
-                        <InputText @bind-Value="producto_Modelo_Peticion.nombre" class="form-control" id="nombreProducto" />
-                    </div>
+                        <!-- Nombre -->
+                        <div class="col-md-6">
+                            <label for="nombre" class="form-label fw-semibold">Nombre</label>
+                            <InputText @bind-Value="producto_Modelo_Peticion.nombre"
+                                       class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                       id="nombre"
+                                       placeholder="Ingrese el nombre del producto" />
+                        </div>
 
-                    <div class="col-md-6">
-                        <label for="descripcionProducto" class="form-label">Descripción</label>
-                        <InputText @bind-Value="producto_Modelo_Peticion.descripcion" class="form-control" id="descripcionProducto" />
-                    </div>
+                        <!-- Descripción -->
+                        <div class="col-md-6">
+                            <label for="descripcion" class="form-label fw-semibold">Descripción</label>
+                            <InputText @bind-Value="producto_Modelo_Peticion.descripcion"
+                                       class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                       id="descripcion"
+                                       placeholder="Ingrese la descripción" />
+                        </div>
 
-                    <div class="col-12">
-                        <label for="precioCompra" class="form-label">Compra</label>
-                        <InputNumber @bind-Value="producto_Modelo_Peticion.precioCompra" class="form-control" id="precioCompra" placeholder="0.00" />
-                    </div>
+                        <!-- Precio de compra -->
+                        <div class="col-md-6">
+                            <label for="precioCompra" class="form-label fw-semibold">Precio de Compra</label>
+                            <InputNumber @bind-Value="producto_Modelo_Peticion.precioCompra"
+                                         class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                         id="precioCompra"
+                                         placeholder="Ingrese el precio de compra" />
+                        </div>
 
-                    <div class="col-12">
-                        <label for="precioVenta" class="form-label">Venta</label>
-                        <InputNumber @bind-Value="producto_Modelo_Peticion.precioVenta" class="form-control" id="precioVenta" placeholder="0.00" />
-                    </div>
+                        <!-- Precio de venta -->
+                        <div class="col-md-6">
+                            <label for="precioVenta" class="form-label fw-semibold">Precio de Venta</label>
+                            <InputNumber @bind-Value="producto_Modelo_Peticion.precioVenta"
+                                         class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                         id="precioVenta"
+                                         placeholder="Ingrese el precio de venta" />
+                        </div>
 
-                    <div class="col-md-6">
-                        <label for="stockActual" class="form-label">Stock actual</label>
-                        <InputNumber @bind-Value="producto_Modelo_Peticion.stockActual" class="form-control" id="stockActual" />
-                    </div>
+                        <!-- Stock actual -->
+                        <div class="col-md-6">
+                            <label for="stockActual" class="form-label fw-semibold">Stock Actual</label>
+                            <InputNumber @bind-Value="producto_Modelo_Peticion.stockActual"
+                                         class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                         id="stockActual"
+                                         placeholder="Ingrese el stock actual" />
+                        </div>
 
-                    <div class="col-md-6">
-                        <label for="stockMinimo" class="form-label">Stock mínimo</label>
-                        <InputNumber @bind-Value="producto_Modelo_Peticion.stockMinimo" class="form-control" id="stockMinimo" />
-                    </div>
+                        <!-- Stock mínimo -->
+                        <div class="col-md-6">
+                            <label for="stockMinimo" class="form-label fw-semibold">Stock Mínimo</label>
+                            <InputNumber @bind-value="producto_Modelo_Peticion.stockMinimo"
+                                         class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                         id="stockMinimo"
+                                         placeholder="Ingrese el stock mínimo" />
+                        </div>
 
-                    <div class="col-md-6">
-                        <label for="idCategoria" class="form-label">ID Categoría</label>
-                        <InputNumber @bind-Value="producto_Modelo_Peticion.idCategoria" class="form-control" id="idCategoria" />
-                    </div>
+                        <!-- Categoría -->
+                        <div class="col-md-6">
+                            <label for="idCategoria" class="form-label fw-semibold">ID Categoría</label>
+                            <InputNumber @bind-Value="producto_Modelo_Peticion.idCategoria"
+                                         class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                         id="idCategoria"
+                                         placeholder="Ingrese el ID de categoría" />
+                        </div>
 
-                    <div class="col-md-6">
-                        <label for="idProveedor" class="form-label">ID Proveedor</label>
-                        <InputNumber @bind-Value="producto_Modelo_Peticion.idProveedor" class="form-control" id="idProveedor" />
-                    </div>
+                        <!-- Proveedor -->
+                        <div class="col-md-6">
+                            <label for="idProveedor" class="form-label fw-semibold">ID Proveedor</label>
+                            <InputNumber @bind-Value="producto_Modelo_Peticion.idProveedor"
+                                         class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                         id="idProveedor"
+                                         placeholder="Ingrese el ID del proveedor" />
+                        </div>
 
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </div>
+                        <hr class="my-4" />
 
-                </EditForm>
+                        <!-- Botones -->
+                        <div class="col-12 text-center mt-4">
+                            <a href="Lista_Producto"
+                               class="btn btn-outline-secondary rounded-pill shadow-sm px-5 me-2"
+                               style="transition: 0.3s; border-width: 2px;">
+                                <i class="bi bi-backspace-fill me-2"></i> Volver
+                            </a>
 
+                            <button type="submit"
+                                    class="btn btn-primary rounded-pill shadow-lg px-5"
+                                    style="background: linear-gradient(90deg, #1e3c72, #2a5298); border: none; transition: 0.3s;">
+                                <i class="bi bi-floppy-fill me-2"></i> Guardar
+                            </button>
+                        </div>
+
+                    </EditForm>
+                </div>
             </div>
         </div>
     </div>
