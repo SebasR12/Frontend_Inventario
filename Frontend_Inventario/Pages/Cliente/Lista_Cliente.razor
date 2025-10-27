@@ -1,0 +1,111 @@
+﻿@page "/Lista_Cliente"
+@using Frontend_Inventario.Modelos
+@using Frontend_Inventario.Servicios
+@using Frontend_Inventario.Servicios.iServicios
+
+@inject Cliente_Interface servicioCliente
+
+<div class="row animated fadeIn fast">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-0 shadow-sm rounded-start" placeholder="Buscar...." />
+                    </div>
+
+                    <NavLink href="" class="btn btn-primary rounded-pill shadow-sm ms-3 px-4">
+                        <i class="bi bi-person-fill-add"></i> Nuevo
+                    </NavLink>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body">
+                <h4 class="card-title">Clientes</h4>
+                <h6 class="card-subtitle mb-3 text-muted">Clientes registrados</h6>
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>idCliente</th>
+                                <th>nombre</th>
+                                <th>contacto</th>
+                                <th>telefono</th>
+                                <th>correo</th>
+                                <th>direccion</th>                                
+                                <th class="text-center text-nowrap">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (cliente_Modelo_Respuestas.Count() > 0)
+                            {
+                                @foreach (var item in cliente_Modelo_Respuestas)
+                                {
+                                    <tr>
+                                        <td>@item.idCliente</td>
+                                        <td>@item.nombre</td>
+                                        <td>@item.contacto</td>
+                                        <td>@item.telefono</td>                                        
+                                        <td>@item.correo</td>
+                                        <td>@item.direccion</td>
+                                        <td class="text-center text-nowrap">
+                                            <NavLink href=@($"Registrar_Cliente/{item.idCliente}")
+                                                     class="btn btn-warning rounded-circle shadow-sm"
+                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Modificar">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </NavLink>
+                                            <button class="btn btn-danger rounded-circle shadow-sm ms-2"
+                                                    @onclick="() => Eliminar_Cliente(item.idCliente)"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }                                
+                            }                            
+                            else
+                            {
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">No hay registros disponibles</td>
+                                </tr>
+                            }                            
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-center mt-3 gap-2">
+                    <button class="btn btn-secondary rounded-pill px-4">Anteriores</button>
+                    <button class="btn btn-secondary rounded-pill px-4">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    public IEnumerable<Cliente_Modelo_Respuesta> cliente_Modelo_Respuestas = new List<Cliente_Modelo_Respuesta>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        cliente_Modelo_Respuestas = await servicioCliente.Get_Clientes();
+    }
+
+    public async Task Eliminar_Cliente(int idCliente)
+    {
+        await servicioCliente.Eliminar_Cliente(idCliente);
+        cliente_Modelo_Respuestas = await servicioCliente.Get_Clientes();
+    }
+}

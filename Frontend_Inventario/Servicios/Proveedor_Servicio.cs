@@ -15,9 +15,9 @@ namespace Frontend_Inventario.Servicios
 
         public async Task<IEnumerable<Proveedor_Modelo_Respuesta>> Get_Proveedores()
         {
-            var respuesta =  _httpClient.GetAsync("https://localhost:7005/api/Proveedor_");
+            var respuesta = await _httpClient.GetAsync("https://localhost:7005/api/Proveedor_");
 
-            var content = await respuesta.Result.Content.ReadAsStringAsync();
+            var content = await respuesta.Content.ReadAsStringAsync();
             
             var Get_Proveedor = JsonConvert.DeserializeObject<IEnumerable<Proveedor_Modelo_Respuesta>>(content);
 

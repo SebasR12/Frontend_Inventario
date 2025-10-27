@@ -15,9 +15,9 @@ namespace Frontend_Inventario.Servicios
 
         public async Task<IEnumerable<Cliente_Modelo_Respuesta>> Get_Clientes()
         {
-            var respuesta =  _httpClient.GetAsync("https://localhost:7005/api/Cliente_");
+            var respuesta = await _httpClient.GetAsync("https://localhost:7005/api/Cliente");
 
-            var content = await respuesta.Result.Content.ReadAsStringAsync();
+            var content = await respuesta.Content.ReadAsStringAsync();
 
             var Get_Cliente = JsonConvert.DeserializeObject<IEnumerable<Cliente_Modelo_Respuesta>>(content);
             
@@ -26,7 +26,7 @@ namespace Frontend_Inventario.Servicios
 
         public async Task<Dictionary<string, object>> Get_Cliente_Id(int idCliente)
         {
-            var response = await _httpClient.GetStringAsync($"https://localhost:7005/api/Cliente_/{idCliente}");
+            var response = await _httpClient.GetStringAsync($"https://localhost:7005/api/Cliente/{idCliente}");
             
             var Get_Cliente = JsonConvert.DeserializeObject<Dictionary<string, object>>(response);
             
@@ -39,7 +39,7 @@ namespace Frontend_Inventario.Servicios
 
             var bodyContent = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("https://localhost:7005/api/Cliente_", bodyContent);
+            var response = await _httpClient.PostAsync("https://localhost:7005/api/Cliente", bodyContent);
 
             if(response.IsSuccessStatusCode)
             {
@@ -59,7 +59,7 @@ namespace Frontend_Inventario.Servicios
 
             var bodyContent = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PutAsync("https://localhost:7005/api/Cliente_", bodyContent);
+            var response = await _httpClient.PutAsync("https://localhost:7005/api/Cliente", bodyContent);
 
             if (response.IsSuccessStatusCode)
             {
@@ -75,7 +75,7 @@ namespace Frontend_Inventario.Servicios
 
         public async Task<bool> Eliminar_Cliente(int idCliente)
         {
-           var response = await _httpClient.DeleteAsync($"https://localhost:7005/api/Cliente_/{idCliente}");
+           var response = await _httpClient.DeleteAsync($"https://localhost:7005/api/Cliente/{idCliente}");
             if(response.IsSuccessStatusCode)
             {
                 return true;
