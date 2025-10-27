@@ -1,5 +1,150 @@
-﻿<h3>Registrar_Cliente</h3>
+﻿@page "/Registrar_Cliente/{idCliente:int?}"
+@using Frontend_Inventario.Modelos
+@using Frontend_Inventario.Servicios
+@using Frontend_Inventario.Servicios.iServicios
+
+@inject Cliente_Interface servicioCliente
+@inject NavigationManager navigationManager
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg rounded-4 border-0">
+                <!-- Header con gradiente -->
+                <div class="card-header text-center text-white rounded-top-4"
+                     style="background: linear-gradient(90deg, #1e3c72, #2a5298);">
+                    <h4 class="mb-0 fw-bold">Registro de Cliente</h4>
+                </div>
+
+                <div class="card-body p-5">
+                    <EditForm Model="cliente_Modelo_Peticion" OnValidSubmit="@(() => GuardarCliente())" class="row g-4">
+
+                        <!-- Nombre -->
+                        <div class="col-md-6">
+                            <label for="nombre" class="form-label fw-semibold">Nombre</label>
+                            <InputText @bind-Value="cliente_Modelo_Peticion.nombre"
+                                       class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                       id="nombre"
+                                       placeholder="Ingrese el nombre del cliente" />
+                        </div>
+
+                        <!-- Contacto -->
+                        <div class="col-md-6">
+                            <label for="contacto" class="form-label fw-semibold">Contacto</label>
+                            <InputText @bind-Value="cliente_Modelo_Peticion.contacto"
+                                       class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                       id="contacto"
+                                       placeholder="Ingrese el nombre de contacto" />
+                        </div>
+
+                        <!-- Teléfono -->
+                        <div class="col-md-6">
+                            <label for="telefono" class="form-label fw-semibold">Teléfono</label>
+                            <InputText @bind-Value="cliente_Modelo_Peticion.telefono"
+                                       class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                       id="telefono"
+                                       placeholder="Ingrese el teléfono del cliente" />
+                        </div>
+
+                        <!-- Correo -->
+                        <div class="col-md-6">
+                            <label for="correo" class="form-label fw-semibold">Correo</label>
+                            <InputText @bind-Value="cliente_Modelo_Peticion.correo"
+                                       class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                       id="correo"
+                                       placeholder="Ingrese el correo electrónico" />
+                        </div>
+
+                        <!-- Dirección -->
+                        <div class="col-md-12">
+                            <label for="direccion" class="form-label fw-semibold">Dirección</label>
+                            <InputText @bind-Value="cliente_Modelo_Peticion.direccion"
+                                       class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                       id="direccion"
+                                       placeholder="Ingrese la dirección del cliente" />
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <!-- Botones -->
+                        <div class="col-12 text-center mt-4">
+                            <a href="Lista_Cliente"
+                               class="btn btn-outline-secondary rounded-pill shadow-sm px-5 me-2"
+                               style="transition: 0.3s; border-width: 2px;">
+                                <i class="bi bi-backspace-fill me-2"></i> Volver
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary rounded-pill shadow-lg px-5"
+                                    style="background: linear-gradient(90deg, #1e3c72, #2a5298); border: none; transition: 0.3s;">
+                                <i class="bi bi-floppy-fill me-2"></i> Guardar
+                            </button>
+                        </div>
+
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @code {
+    private Cliente_Modelo_Peticion cliente_Modelo_Peticion { get; set; } = new Cliente_Modelo_Peticion();
 
+    [Parameter]
+    public int? idCliente { get; set; }
+
+    private async Task GuardarCliente()
+    {
+        if(cliente_Modelo_Peticion.idCliente > 0)
+        {
+            cliente_Modelo_Peticion.proceso = 2;            
+            var respuesta = await servicioCliente.Editar_Cliente(cliente_Modelo_Peticion);
+        }else
+        {
+            cliente_Modelo_Peticion.proceso = 1;
+            cliente_Modelo_Peticion.idCliente = 0;
+            var respuesta = await servicioCliente.Crear_Cliente(cliente_Modelo_Peticion);
+        }        
+        navigationManager.NavigateTo("Lista_Cliente");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(idCliente.HasValue && idCliente.Value > 0)
+        {
+            var response = await servicioCliente.Get_Cliente_Id(idCliente.Value);
+            if (response != null)
+            {
+                cliente_Modelo_Peticion.idCliente = response.ContainsKey("idCliente")
+                ? Convert.ToInt32(response["idCliente"])
+                : 0;
+
+                cliente_Modelo_Peticion.nombre = response.ContainsKey("nombre")
+                ? response["nombre"].ToString()
+                : string.Empty;
+
+                cliente_Modelo_Peticion.contacto = response.ContainsKey("contacto")
+                ? response["contacto"].ToString()
+                : string.Empty;
+
+                cliente_Modelo_Peticion.telefono = response.ContainsKey("telefono")
+                ? response["telefono"].ToString()
+                : string.Empty;
+
+                cliente_Modelo_Peticion.correo = response.ContainsKey("telefono")
+                ? response["telefono"].ToString()
+                : string.Empty;
+
+                cliente_Modelo_Peticion.direccion = response.ContainsKey("direccion")
+                ? response["direccion"].ToString()
+                : string.Empty;
+            }
+            else
+            {
+                Console.WriteLine("No se encontro el usuario con el ID proporcionado");
+            }
+        }
+    }
 }
