@@ -1,9 +1,9 @@
-﻿@page "/Lista_DetalleFactura"
+﻿@page "/Lista_Factura"
 @using Frontend_Inventario.Modelos
 @using Frontend_Inventario.Servicios
 @using Frontend_Inventario.Servicios.iServicios
 
-@inject DetalleFactura_Interface servicioDetalleFactura
+@inject Factura_Interface servicioFactura
 
 <div class="row animated fadeIn fast">
     <div class="col-12">
@@ -18,12 +18,13 @@
                         <input type="text" class="form-control border-0 shadow-sm rounded-start" placeholder="Buscar...." />
                     </div>
 
-                    <NavLink href="Registrar_DetalleFactura" class="btn btn-primary rounded-pill shadow-sm ms-3 px-4">
+                    <NavLink href="Registrar_Factura" class="btn btn-primary rounded-pill shadow-sm ms-3 px-4">
                         <i class="bi bi-person-fill-add"></i> Nuevo
                     </NavLink>
-                    <NavLink href="Lista_Factura" class="btn btn-primary rounded-pill shadow-lg px-4 ms-4">
-                        <i class="bi bi-arrow-left-circle"></i> Volver
+                    <NavLink href="Lista_DetalleFactura" class="btn btn-success rounded-pill shadow-lg px-4 ms-4">
+                        <i class="bi bi-file-earmark-text"></i> Detalle Facturas
                     </NavLink>
+
                 </div>
 
             </div>
@@ -35,46 +36,48 @@
     <div class="col-12">
         <div class="card shadow-lg border-0 rounded-4">
             <div class="card-body">
-                <h4 class="card-title">Detalle de Facturas</h4>
+                <h4 class="card-title">Facturas</h4>
                 <h6 class="card-subtitle mb-4 text-muted">Facturas registradas</h6>
 
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered align-middle">
                         <thead class="table-light">
                             <tr>
-                                <th>idDetalle</th>
                                 <th>idFactura</th>
-                                <th>idProducto</th>
-                                <th>Cantidad</th>
-                                <th>Precio Unitario</th>
-                                <th>Descuento</th>
-                                <th>Subtotal</th>
-                                <th class="text-center">Acciones</th>
+                                <th>idCliente</th>
+                                <th>fecha</th>
+                                <th>total</th>
+                                <th>idUsuario</th>
+                                <th class="text-center text-nowrap">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if (detalleFactura_Modelo_Respuestas.Count() > 0)
+                            @if (factura_Modelo_Respuestas.Count() > 0)
                             {
-                                @foreach (var item in detalleFactura_Modelo_Respuestas)
+                                @foreach (var item in factura_Modelo_Respuestas)
                                 {
                                     <tr>
-                                        <td>@item.idDetalle</td>
                                         <td>@item.idFactura</td>
-                                        <td>@item.idProducto</td>
-                                        <td>@item.cantidad</td>
-                                        <td>@item.precioUnitario</td>
-                                        <td>@item.descuento</td>
-                                        <td>@item.subtotal</td>
-                                        <td class="text-center">
-                                            <!-- Botón de editar -->
-                                            <NavLink href=@($"Registrar_DetalleFactura/{item.idDetalle}")
+                                        <td>@item.idCliente</td>
+                                        <td>@item.fecha</td>
+                                        <td>@item.total</td>
+                                        <td>@item.idUsuario</td>
+                                        <td class="text-center text-nowrap">
+                                            <!-- Botón de ver -->
+                                            @* <NavLink href=@($"Registrar_DetalleFactura_ID/{item.idFactura}")
+                                                     class="btn btn-success rounded-circle shadow-sm"
+                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Ver">
+                                                <i class="bi bi-book-fill"></i>
+                                            </NavLink> *@
+                                            <!-- Botón de modificar -->
+                                            <NavLink href=@($"Registrar_Factura/{item.idFactura}")
                                                      class="btn btn-warning rounded-circle shadow-sm"
                                                      data-bs-toggle="tooltip" data-bs-placement="top" title="Modificar">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </NavLink>
                                             <!-- Botón de eliminar -->
                                             <button class="btn btn-danger rounded-circle shadow-sm ms-2"
-                                                    @onclick="() => EliminarDetalleFactura(item.idDetalle)"
+                                                    @onclick="() => Eliminar_Factura(item.idFactura)"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar">
                                                 <i class="bi bi-trash-fill"></i>
                                             </button>
@@ -85,7 +88,7 @@
                             else
                             {
                                 <tr>
-                                    <td colspan="8" class="text-center text-muted">No hay registros disponibles</td>
+                                    <td colspan="6" class="text-center text-muted">No hay registros disponibles</td>
                                 </tr>
                             }
                         </tbody>
@@ -104,17 +107,17 @@
 
 
 
-@code {
-    public IEnumerable<Detalle_Factura_Modelo_Respuesta> detalleFactura_Modelo_Respuestas = new List<Detalle_Factura_Modelo_Respuesta>();
 
+@code {
+    public IEnumerable<Factura_Modelo_Respuesta> factura_Modelo_Respuestas = new List<Factura_Modelo_Respuesta>();
     protected override async Task OnInitializedAsync()
     {
-        detalleFactura_Modelo_Respuestas = await servicioDetalleFactura.Get_DetalleFacturas();
+        factura_Modelo_Respuestas = await servicioFactura.Get_Factura();
     }
 
-    public async Task EliminarDetalleFactura(int idDetalleFactura)
+    public async Task Eliminar_Factura(int idFactura)
     {
-        await servicioDetalleFactura.Eliminar_DetalleFactura(idDetalleFactura);
-        detalleFactura_Modelo_Respuestas = await servicioDetalleFactura.Get_DetalleFacturas();
+        var respuesta = await servicioFactura.Eliminar_Factura(idFactura);
+        factura_Modelo_Respuestas = await servicioFactura.Get_Factura();
     }
 }

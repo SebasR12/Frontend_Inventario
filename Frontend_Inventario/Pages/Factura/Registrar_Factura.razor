@@ -1,0 +1,128 @@
+﻿@page "/Registrar_Factura/{idFactura:int?}"
+@using Frontend_Inventario.Modelos
+@using Frontend_Inventario.Servicios
+@using Frontend_Inventario.Servicios.iServicios
+
+@inject NavigationManager navigationManager
+@inject Factura_Interface servicioFactura
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg rounded-4 border-0">
+                <!-- Header con texto negro -->
+                <div class="card-header bg-gradient-info text-center rounded-top-4">
+                    <h4 class="mb-0 text-dark">Registro de Almacen</h4>
+                </div>
+
+                <div class="card-body p-5">
+                    <EditForm Model="factura_Modelo_Peticion" OnValidSubmit="@(()=>GuardarFactura())" class="row g-4">
+
+                        <!-- Nombre -->
+                        <div class="col-md-6">
+                            <label for="nombre" class="form-label fw-semibold">ID Cliente</label>
+                            <InputNumber @bind-Value="factura_Modelo_Peticion.idCliente"
+                                   class="form-control form-control-lg shadow-sm"
+                                         id="idCliente"
+                                   placeholder="Ingrese nombre" />
+                        </div>
+
+                        <!-- Ubicacion -->
+                        <div class="col-md-6">
+                            <label for="ubicacion" class="form-label fw-semibold">Total</label>
+                            <InputNumber @bind-Value="factura_Modelo_Peticion.total"
+                                   class="form-control form-control-lg shadow-sm"
+                                         id="total"
+                                   placeholder="Ingrese ubicación" />
+                        </div>
+
+                        <!-- Capacidad -->
+                        <div class="col-12">
+                            <label for="capacidad" class="form-label fw-semibold">ID Usuario</label>
+                            <InputNumber @bind-Value="factura_Modelo_Peticion.idUsuario"
+                                   class="form-control form-control-lg shadow-sm"
+                                         id="idUsuario"
+                                   placeholder="Ingrese capacidad" />
+                        </div>
+                        
+                        <hr />
+
+                        <!-- Botones -->
+                        <div class="col-12 text-center mt-4">
+                            <NavLink href="listaalmacenes"
+                                     class="btn btn-outline-secondary rounded-pill shadow-sm px-5 me-2">
+                                <i class="bi bi-backspace-fill me-2"></i> Volver
+                            </NavLink>
+
+                            <button type="submit"
+                                    class="btn btn-primary rounded-pill shadow-sm px-5">
+                                <i class="bi bi-floppy-fill me-2"></i> Guardar
+                            </button>
+                        </div>
+
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    private Factura_Modelo_Peticion factura_Modelo_Peticion { get; set; } = new Factura_Modelo_Peticion();
+
+    [Parameter]
+    public int? idFactura { get; set; }
+
+    public async Task GuardarFactura()
+    {
+        if(factura_Modelo_Peticion.idFactura > 0)
+        {
+            factura_Modelo_Peticion.proceso = 2;
+            var respuesta = await servicioFactura.Editar_Factura(factura_Modelo_Peticion);
+        }else
+        {
+            factura_Modelo_Peticion.proceso = 1;
+            factura_Modelo_Peticion.idFactura = 0;
+            var respuesta = await servicioFactura.Crear_Factura(factura_Modelo_Peticion);
+        }
+        navigationManager.NavigateTo("Lista_Factura");
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(idFactura.HasValue && idFactura.Value>0)
+        {
+            var response = await servicioFactura.Get_Factura_Id(idFactura.Value);
+            if (response != null)
+            {
+                factura_Modelo_Peticion.idFactura = response.ContainsKey("idFactura") 
+                ? Convert.ToInt32(response["idFactura"]) 
+                : 0;
+
+                factura_Modelo_Peticion.idCliente = response.ContainsKey("idCliente")
+                ? Convert.ToInt32(response["idCliente"])
+                : 0;
+
+                factura_Modelo_Peticion.fecha = response.ContainsKey("fecha")
+                ? response["fecha"].ToString()
+                : string.Empty;
+
+                factura_Modelo_Peticion.total = response.ContainsKey("total")
+                ? Convert.ToInt32(response["total"])
+                : 0;
+
+                factura_Modelo_Peticion.idUsuario = response.ContainsKey("idUsuario")
+                ? Convert.ToInt32(response["idUsuario"])
+                : 0;
+
+            }
+            else
+            {
+                Console.WriteLine("No se encontro la factura con el ID proporcionado");
+            }
+        }
+    }
+}

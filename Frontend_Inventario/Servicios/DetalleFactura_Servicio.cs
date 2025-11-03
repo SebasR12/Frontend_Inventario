@@ -28,6 +28,13 @@ namespace Frontend_Inventario.Servicios
             return Get_DetalleFactura;
         }
 
+        public async Task<Dictionary<string, object>> Get_DetalleFactura_IdFactura(int idFactura)
+        {
+            var response = await _httpClient.GetStringAsync($"https://localhost:7005/api/DetalleFactura_/{idFactura}");
+            var Get_Factura = JsonConvert.DeserializeObject<Dictionary<string, object>>(response);
+            return Get_Factura;
+        }
+
         public async Task<Detalle_Factura_Modelo_Peticion> Crear_DetalleFactura(Detalle_Factura_Modelo_Peticion detalleFactura)
         {
             var content = JsonConvert.SerializeObject(detalleFactura);
@@ -73,6 +80,8 @@ namespace Frontend_Inventario.Servicios
             {
                 return false;
             }
-        } 
+        }
+
+        
     }
 }

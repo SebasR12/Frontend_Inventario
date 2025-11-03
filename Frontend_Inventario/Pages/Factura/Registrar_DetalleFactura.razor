@@ -1,0 +1,146 @@
+﻿@page "/Registrar_DetalleFactura_ID/{idFactura:int?}"
+@using Frontend_Inventario.Modelos
+@using Frontend_Inventario.Servicios
+@using Frontend_Inventario.Servicios.iServicios
+
+@inject DetalleFactura_Interface servicioDetalleFactura
+@inject NavigationManager navigationManager
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg rounded-4 border-0">
+                <!-- Header con gradiente -->
+                <div class="card-header text-center text-white rounded-top-4"
+                     style="background: linear-gradient(90deg, #1e3c72, #2a5298);">
+                    <h4 class="mb-0 fw-bold">Detalle de Factura</h4>
+                </div>
+
+                <div class="card-body p-5">
+                    <EditForm Model="detalleFactura_Modelo_Peticion" OnValidSubmit="@(() => GuardarCliente())" class="row g-4">
+
+                        <!-- ID Factura -->
+                        <div class="col-md-6">
+                            <label for="idFactura" class="form-label fw-semibold">ID Factura</label>
+                            <InputNumber @bind-Value="detalleFactura_Modelo_Peticion.idFactura"
+                                         class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                         id="idFactura"
+                                         placeholder="Ingrese el ID de la factura" />
+                        </div>
+
+                        <!-- ID Producto -->
+                        <div class="col-md-6">
+                            <label for="idProducto" class="form-label fw-semibold">ID Producto</label>
+                            <InputNumber @bind-Value="detalleFactura_Modelo_Peticion.idProducto"
+                                         class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                         id="idProducto"
+                                         placeholder="Ingrese el ID del producto" />
+                        </div>
+
+                        <!-- Cantidad -->
+                        <div class="col-12">
+                            <label for="cantidad" class="form-label fw-semibold">Cantidad</label>
+                            <InputNumber @bind-Value="detalleFactura_Modelo_Peticion.cantidad"
+                                         class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                         id="cantidad"
+                                         placeholder="Ingrese la cantidad" />
+                        </div>
+
+                        <!-- Precio Unitario -->
+                        <div class="col-12">
+                            <label for="precioUnitario" class="form-label fw-semibold">Precio Unitario</label>
+                            <InputNumber @bind-Value="detalleFactura_Modelo_Peticion.precioUnitario"
+                                         class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                         id="precioUnitario"
+                                         placeholder="Ingrese el precio unitario" />
+                        </div>
+
+                        <!-- Descuento -->
+                        <div class="col-md-12">
+                            <label for="descuento" class="form-label fw-semibold">Descuento</label>
+                            <InputNumber @bind-Value="detalleFactura_Modelo_Peticion.descuento"
+                                         class="form-control form-control-lg shadow-sm border-0 rounded-pill"
+                                         id="descuento"
+                                         placeholder="Ingrese el descuento" />
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <!-- Botones -->
+                        <div class="col-12 text-center mt-4">
+                            <NavLink href="Lista_DetalleFactura"
+                                     class="btn btn-outline-secondary rounded-pill shadow-sm px-5 me-2"
+                                     style="transition: 0.3s; border-width: 2px;">
+                                <i class="bi bi-backspace-fill me-2"></i> Volver
+                            </NavLink>
+
+                            <button type="submit"
+                                    class="btn btn-primary rounded-pill shadow-lg px-5"
+                                    style="background: linear-gradient(90deg, #1e3c72, #2a5298); border: none; transition: 0.3s;">
+                                <i class="bi bi-floppy-fill me-2"></i> Guardar
+                            </button>
+                        </div>
+
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    private Detalle_Factura_Modelo_Peticion detalleFactura_Modelo_Peticion { get; set; } = new Detalle_Factura_Modelo_Peticion();
+
+    [Parameter]
+    public int? idFactura { get; set; }
+
+    private async Task GuardarCliente()
+    {
+        if(detalleFactura_Modelo_Peticion.idFactura> 0)
+        {
+            detalleFactura_Modelo_Peticion.proceso = 2;
+            var respuesta = await servicioDetalleFactura.Editar_DetalleFactura(detalleFactura_Modelo_Peticion);
+        }
+        else
+        {
+            detalleFactura_Modelo_Peticion.proceso = 1;
+            detalleFactura_Modelo_Peticion.idDetalle = 0; // Valor predeterminado para idFactura
+            var respuesta = await servicioDetalleFactura.Crear_DetalleFactura(detalleFactura_Modelo_Peticion);
+        }
+        navigationManager.NavigateTo("Lista_DetalleFactura");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (idFactura.HasValue && idFactura.Value > 0)
+        {
+            var response = await servicioDetalleFactura.Get_DetalleFactura_Id(idFactura.Value);
+            if(response  != null)
+            {
+                detalleFactura_Modelo_Peticion.idDetalle = response.ContainsKey("idDetalle")
+                ? Convert.ToInt32(response["idDetalle"])
+                : 0;
+                detalleFactura_Modelo_Peticion.idFactura = response.ContainsKey("idFactura")
+                ? Convert.ToInt32(response["idFactura"])
+                : 0;
+                detalleFactura_Modelo_Peticion.idProducto = response.ContainsKey("idProducto")
+                ? Convert.ToInt32(response["idProducto"])
+                : 0;
+                detalleFactura_Modelo_Peticion.cantidad = response.ContainsKey("cantidad")
+                ? Convert.ToInt32(response["cantidad"])
+                : 0;
+                detalleFactura_Modelo_Peticion.precioUnitario = response.ContainsKey("precioUnitario")
+                ? Convert.ToInt32(response["precioUnitario"])
+                : 0;
+                detalleFactura_Modelo_Peticion.descuento = response.ContainsKey("descuento")
+                ? Convert.ToInt32(response["descuento"])
+                : 0;
+            }
+            else
+            {
+                Console.WriteLine("No se encontró el detalle de factura con el ID proporcionado.");
+            }
+        }
+    }
+}
