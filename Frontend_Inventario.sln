@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.14.36121.58
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend_Inventario", "Frontend_Inventario\Frontend_Inventario.csproj", "{2C1D2782-1E81-4250-8ECA-C37431599882}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ADBCB96F-C455-F8B8-2A3F-AB5C79F5BBDC} = {ADBCB96F-C455-F8B8-2A3F-AB5C79F5BBDC}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaInventario_API", "..\SistemaInventario_API\SistemaInventario_API\SistemaInventario_API.csproj", "{ADBCB96F-C455-F8B8-2A3F-AB5C79F5BBDC}"
 EndProject

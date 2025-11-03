@@ -1,0 +1,61 @@
+﻿/* Estilo del card */
+.card {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+}
+
+/* Estilo de los botones */
+.btn {
+    border-radius: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    /* Efecto hover en botones */
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+/* Efecto en el campo de búsqueda */
+.input-group-text {
+    border-radius: 50px 0 0 50px;
+    background-color: #f0f0f0;
+}
+
+.form-control {
+    border-radius: 0 50px 50px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Paginación */
+.btn-outline-secondary {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+    .btn-outline-secondary:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+/* Estilo de los iconos */
+.bi {
+    font-size: 1.2rem;
+}
+
+/* Table */
+.table-hover tbody tr:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+/* Tabla responsive */
+.table-responsive {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Tooltip */
+[data-bs-toggle="tooltip"] {
+    cursor: pointer;
+}

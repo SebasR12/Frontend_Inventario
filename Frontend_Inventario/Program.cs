@@ -14,6 +14,7 @@ builder.Services.AddScoped<Usuario_Interface, Usuario_Servicio>();
 builder.Services.AddScoped<Producto_Interface, Producto_Servicio>();
 builder.Services.AddScoped<Proveedor_Interface, Proveedor_Servicio>();
 builder.Services.AddScoped<Cliente_Interface, Cliente_Servicio>();
+builder.Services.AddScoped<DetalleFactura_Interface, DetalleFactura_Servicio>();
 
 
 await builder.Build().RunAsync();
