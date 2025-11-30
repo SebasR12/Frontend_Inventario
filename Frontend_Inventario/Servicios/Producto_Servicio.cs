@@ -15,7 +15,7 @@ namespace Frontend_Inventario.Servicios
 
         public async Task<IEnumerable<Producto_Modelo_Respuesta>> Get_Producto()
         {
-            var respuesta = await _httpClient.GetAsync("https://localhost:7005/api/Producto_");
+            var respuesta = await _httpClient.GetAsync("https://localhost:7005/api/Producto");
 
             var content = await respuesta.Content.ReadAsStringAsync();
 
@@ -26,7 +26,7 @@ namespace Frontend_Inventario.Servicios
 
         public async Task<Dictionary<string, object>> Get_Producto_ID(int idProducto)
         {
-            var response = await _httpClient.GetStringAsync($"https://localhost:7005/api/Producto_/{idProducto}");
+            var response = await _httpClient.GetStringAsync($"https://localhost:7005/api/Producto/{idProducto}");
 
             var Get_Producto = JsonConvert.DeserializeObject<Dictionary<string, object>>(response);
             
@@ -39,7 +39,7 @@ namespace Frontend_Inventario.Servicios
 
             var BodyContent = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("https://localhost:7005/api/Producto_", BodyContent);
+            var response = await _httpClient.PostAsync("https://localhost:7005/api/Producto", BodyContent);
 
             if (response.IsSuccessStatusCode) 
             {
@@ -59,7 +59,7 @@ namespace Frontend_Inventario.Servicios
 
             var BodyContent = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("https://localhost:7005/api/Producto_", BodyContent);
+            var response = await _httpClient.PutAsync("https://localhost:7005/api/Producto", BodyContent);
 
             if (response.IsSuccessStatusCode)
             {
@@ -75,7 +75,7 @@ namespace Frontend_Inventario.Servicios
 
         public async Task<bool> Eliminar_Producto(int idProducto)
         {
-            var response = await _httpClient.DeleteAsync($"https://localhost:7005/api/Producto_/{idProducto}");
+            var response = await _httpClient.DeleteAsync($"https://localhost:7005/api/Producto/{idProducto}");
 
             if (response.IsSuccessStatusCode)
             {

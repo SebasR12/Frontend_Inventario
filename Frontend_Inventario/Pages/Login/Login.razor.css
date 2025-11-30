@@ -1,0 +1,16 @@
+﻿.gradient-custom {
+    /* fallback */
+    background: #0d1b2a;
+    /* Chrome 10–25, Safari 5.1–6 */
+    background: -webkit-linear-gradient( to right, #0d47a1, /* Azul profundo */
+    #1976d2, /* Azul vivo */
+    #ffd700, /* Dorado brillante */
+    #c6a300 /* Dorado más cálido */
+    );
+    /* W3C, IE10+, Edge, FF16+, Chrome26+, Opera12+, Safari7+ */
+    background: linear-gradient( to right, #0d47a1, /* Azul profundo */
+    #1976d2, /* Azul vivo */
+    #ffd700, /* Dorado brillante */
+    #c6a300 /* Dorado cálido */
+    );
+}

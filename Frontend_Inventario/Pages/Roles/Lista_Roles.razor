@@ -1,0 +1,103 @@
+﻿@page "/Lista_Roles"
+@using Frontend_Inventario.Modelos
+@using Frontend_Inventario.Servicios
+@using Frontend_Inventario.Servicios.iServicios
+
+@inject Rol_Interface servicioRol
+
+<div class="row animated fadeIn fast">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body">
+
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                    <div class="input-group search-bar">
+                        <span class="input-group-text bg-light border-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-0 shadow-sm rounded-start" placeholder="Buscar..." />
+                    </div>
+
+                    <NavLink href="Registrar_Roles" class="btn btn-primary rounded-pill shadow-sm ms-md-3 px-4 new-btn">
+                        <i class="bi bi-person-fill-add me-2"></i> Nuevo
+                    </NavLink>>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body">
+                <h4 class="card-title fw-bold text-primary">Almacenes</h4>
+                <h6 class="card-subtitle mb-3 text-muted">Almacenes registrados</h6>
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered align-middle custom-table">
+                        <thead class="table-light">
+                            <tr>
+                                <th>IDl</th>
+                                <th>Nombre Rol</th>
+                                <th>Descripcion</th>
+                                <th class="text-center text-nowrap">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (rol_Modelo_Respuestas.Count() > 0)
+                            {
+
+                                @foreach (var item in rol_Modelo_Respuestas)
+                                {
+                                    <tr>
+                                        <td>@item.idRol</td>
+                                        <td>@item.nombreRol</td>
+                                        <td>@item.descripcion</td>                                        
+                                        <td class="text-center text-nowrap">
+                                            <NavLink href=@($"Registrar_Roles/{item.idRol}") class="btn btn-warning rounded-circle shadow-sm action-btn" title="Modificar">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </NavLink>
+                                            <button class="btn btn-danger rounded-circle shadow-sm ms-2 action-btn" title="Eliminar"
+                                                    @onclick="() => Eliminar_Rol(item.idRol)">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="9" class="text-center text-muted">No hay registros disponibles</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-center mt-3 gap-2">
+                    <button class="btn btn-outline-secondary rounded-pill px-4 nav-btn">Anteriores</button>
+                    <button class="btn btn-outline-secondary rounded-pill px-4 nav-btn">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    public IEnumerable<Rol_Modelo_Respuesta> rol_Modelo_Respuestas = new List<Rol_Modelo_Respuesta>();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        rol_Modelo_Respuestas = await servicioRol.Get_Roles();
+    }
+
+    public async Task Eliminar_Rol(int idRol)
+    {
+        await servicioRol.Eliminar_Rol(idRol);
+        rol_Modelo_Respuestas = await servicioRol.Get_Roles();
+    }
+}

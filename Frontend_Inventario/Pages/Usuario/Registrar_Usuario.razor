@@ -99,6 +99,7 @@
         if (usuario_Modelo_Peticion.idUsuario > 0)
         {
             usuario_Modelo_Peticion.proceso = 2;
+            usuario_Modelo_Peticion.intentosLogin = 1;
             var respuesta = await servicioUsuario.Editar_Usuario(usuario_Modelo_Peticion);
 
         }
@@ -106,6 +107,7 @@
         {
             usuario_Modelo_Peticion.proceso = 1; // 1 para crear, 2 para actualizar
             usuario_Modelo_Peticion.idUsuario = 0; // 0 para crear nuevo usuario
+            usuario_Modelo_Peticion.intentosLogin = 0; // Inicializar intentosLogin en 0 para nuevo usuario
             var respuesta = await servicioUsuario.Crear_Usuario(usuario_Modelo_Peticion);
         }
         navigationManager.NavigateTo("Lista_Usuario");
@@ -142,6 +144,11 @@
                 usuario_Modelo_Peticion.estado = response.ContainsKey("estado")
                 ? Convert.ToInt32(response["estado"])
                 : 0;
+
+                usuario_Modelo_Peticion.intentosLogin = response.ContainsKey("intentosLogin")
+                ? Convert.ToInt32(response["intentosLogin"])
+                : 0;
+
             }
             else
             {

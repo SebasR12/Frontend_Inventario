@@ -1,0 +1,107 @@
+﻿@page "/Lista_Movimiento"
+@using Frontend_Inventario.Modelos
+@using Frontend_Inventario.Servicios
+@using Frontend_Inventario.Servicios.iServicios
+    
+@inject Movimiento_Interface servicioMovimiento
+@inject NavigationManager navigationManager
+
+
+<div class="row animated fadeIn fast">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body">
+
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                    <div class="input-group search-bar">
+                        <span class="input-group-text bg-light border-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-0 shadow-sm rounded-start" placeholder="Buscar..." />
+                    </div>
+
+                    <NavLink href="Registrar_Movimiento" class="btn btn-primary rounded-pill shadow-sm ms-md-3 px-4 new-btn">
+                        <i class="bi bi-person-fill-add me-2"></i> Nuevo
+                    </NavLink>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body">
+                <h4 class="card-title fw-bold text-primary">Movimientos de Inventario</h4>
+                <h6 class="card-subtitle mb-3 text-muted">Movimientos registrados en el sistema</h6>
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered align-middle custom-table">
+                        <thead class="table-light">
+                            <tr>
+                                <th>idMovimiento</th>
+                                <th>idProducto</th>
+                                <th>tipoMovimiento</th>
+                                <th>cantidad</th>
+                                <th>idUsuario</th>                               
+                                <th class="text-center text-nowrap">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(movimiento_Modelo_Respuestas.Count() > 0)
+                            {
+                                @foreach(var item in movimiento_Modelo_Respuestas)
+                                {
+                                    <tr>
+                                        <td>@item.idMovimiento</td>
+                                        <td>@item.idProducto</td>
+                                        <td>@item.tipoMovimiento</td>
+                                        <td>@item.cantidad</td>
+                                        <td>@item.idUsuario</td>
+                                        <td class="text-center text-nowrap">
+                                            <NavLink href=@($"Registrar_Movimiento/{item.idMovimiento}") class="btn btn-warning rounded-circle shadow-sm action-btn" title="Modificar">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </NavLink>
+                                            <button class="btn btn-danger rounded-circle shadow-sm ms-2 action-btn" title="Eliminar"
+                                                    @onclick="() => Eliminar_Movimiento(item.idMovimiento)">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="9" class="text-center text-muted">No hay registros disponibles</td>
+                                </tr>
+                            }                            
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-center mt-3 gap-2">
+                    <button class="btn btn-outline-secondary rounded-pill px-4 nav-btn">Anteriores</button>
+                    <button class="btn btn-outline-secondary rounded-pill px-4 nav-btn">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    public IEnumerable<Movimiento_Modelo_Respuesta> movimiento_Modelo_Respuestas = new List<Movimiento_Modelo_Respuesta>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        movimiento_Modelo_Respuestas = await servicioMovimiento.Get_Movimientos();
+    }
+
+    public async Task Eliminar_Movimiento(int idMovimiento)
+    {
+        await servicioMovimiento.Eliminar_Movimiento(idMovimiento);
+        movimiento_Modelo_Respuestas = await servicioMovimiento.Get_Movimientos();
+    }
+}

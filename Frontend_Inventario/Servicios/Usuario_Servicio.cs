@@ -59,7 +59,7 @@ namespace Frontend_Inventario.Servicios
 
             var bodyContent = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("https://localhost:7005/api/Usuario_", bodyContent);
+            var response = await _httpClient.PutAsync("https://localhost:7005/api/Usuario_", bodyContent);
 
             if (response.IsSuccessStatusCode)
             {

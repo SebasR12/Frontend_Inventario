@@ -1,0 +1,105 @@
+﻿@page "/Registrar_Roles/{idRol:int?}"
+@using Frontend_Inventario.Modelos
+@using Frontend_Inventario.Servicios
+@using Frontend_Inventario.Servicios.iServicios
+
+@inject Rol_Interface servicioRol
+@inject NavigationManager navigationManager
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg rounded-4 border-0">
+                <!-- Header -->
+                <div class="card-header bg-gradient-info text-center rounded-top-4">
+                    <h4 class="mb-0 text-dark">Registro de Roles</h4>
+                </div>
+
+                <div class="card-body p-5">
+                    <EditForm Model="rol_Modelo_Peticion" OnValidSubmit="@(()=>GuardarRol())" class="row g-4">
+
+                        <!-- Nombre del Rol -->
+                        <div class="col-md-6">
+                            <label for="nombreRol" class="form-label fw-semibold">Nombre del Rol</label>
+                            <InputText @bind-Value="rol_Modelo_Peticion.nombreRol" class="form-control form-control-lg shadow-sm"
+                                   id="nombreRol"
+                                   placeholder="Ingrese el nombre del rol" />
+                        </div>
+
+                        <!-- Descripción del Rol -->
+                        <div class="col-md-6">
+                            <label for="descripcion" class="form-label fw-semibold">Descripción</label>
+                            <InputText @bind-Value="rol_Modelo_Peticion.descripcion" class="form-control form-control-lg shadow-sm"
+                                   id="descripcion"
+                                   placeholder="Ingrese la descripción del rol" />
+                        </div>
+
+                        <hr />
+
+                        <!-- Botones -->
+                        <div class="col-12 text-center mt-4">
+                            <a href="Lista_Roles"
+                               class="btn btn-outline-secondary rounded-pill shadow-sm px-5 me-2">
+                                <i class="bi bi-backspace-fill me-2"></i> Volver
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary rounded-pill shadow-sm px-5">
+                                <i class="bi bi-floppy-fill me-2"></i> Guardar
+                            </button>
+                        </div>
+
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private Rol_Modelo_Peticion rol_Modelo_Peticion = new Rol_Modelo_Peticion();
+
+    [Parameter]
+    public int? idRol { get; set; }
+
+    private async Task GuardarRol()
+    {
+        if (rol_Modelo_Peticion.idRol>0)
+        {
+            rol_Modelo_Peticion.proceso = 2; // Asignar el valor adecuado para el proceso de actualización
+            var respuesta = await servicioRol.Editar_Rol(rol_Modelo_Peticion);
+        }
+        else
+        {
+            rol_Modelo_Peticion.proceso = 1; // Asignar el valor adecuado para el proceso
+            rol_Modelo_Peticion.idRol = 0; // Asignar el valor adecuado para idRol si es necesario
+            var respuesta = await servicioRol.Crear_Rol(rol_Modelo_Peticion);
+        }        
+        navigationManager.NavigateTo("Lista_Roles");
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (idRol.HasValue && idRol.Value > 0) 
+        {
+            var response = await servicioRol.Get_Rol_Id(idRol.Value);
+            if(response!= null)
+            {
+                rol_Modelo_Peticion.idRol = response.ContainsKey("idRol")
+                ? Convert.ToInt32(response["idRol"])
+                : 0;
+
+                rol_Modelo_Peticion.nombreRol = response.ContainsKey("nombreRol")
+                ? response["nombreRol"]?.ToString() ?? string.Empty
+                : string.Empty;
+
+                rol_Modelo_Peticion.descripcion = response.ContainsKey("descripcion")
+                ? response["descripcion"]?.ToString() ?? string.Empty
+                : string.Empty;
+            }
+            else
+            {
+                Console.WriteLine("No se encontró el rol con el ID proporcionado.");
+            }
+        }
+    }
+}

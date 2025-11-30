@@ -10,52 +10,55 @@
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="card shadow-lg rounded-4 border-0">
-                <!-- Header con texto negro -->
-                <div class="card-header bg-gradient-info text-center rounded-top-4">
-                    <h4 class="mb-0 text-dark">Registro de Almacen</h4>
+                <!-- Header con gradiente -->
+                <div class="card-header text-center text-white rounded-top-4"
+                     style="background: linear-gradient(90deg, #1e3c72, #2a5298);">
+                    <h4 class="mb-0 fw-bold">Registro de Facturas</h4>
                 </div>
 
                 <div class="card-body p-5">
-                    <EditForm Model="factura_Modelo_Peticion" OnValidSubmit="@(()=>GuardarFactura())" class="row g-4">
+                    <EditForm Model="factura_Modelo_Peticion" OnValidSubmit="@(() => GuardarFactura())" class="row g-4">
 
-                        <!-- Nombre -->
+                        <!-- ID Cliente -->
                         <div class="col-md-6">
-                            <label for="nombre" class="form-label fw-semibold">ID Cliente</label>
+                            <label for="idCliente" class="form-label fw-semibold">ID Cliente</label>
                             <InputNumber @bind-Value="factura_Modelo_Peticion.idCliente"
-                                   class="form-control form-control-lg shadow-sm"
+                                         class="form-control form-control-lg shadow-sm border-0 rounded-pill"
                                          id="idCliente"
-                                   placeholder="Ingrese nombre" />
+                                         placeholder="Ingrese el ID del cliente" />
                         </div>
 
-                        <!-- Ubicacion -->
+                        <!-- Total -->
                         <div class="col-md-6">
-                            <label for="ubicacion" class="form-label fw-semibold">Total</label>
+                            <label for="total" class="form-label fw-semibold">Total</label>
                             <InputNumber @bind-Value="factura_Modelo_Peticion.total"
-                                   class="form-control form-control-lg shadow-sm"
+                                         class="form-control form-control-lg shadow-sm border-0 rounded-pill"
                                          id="total"
-                                   placeholder="Ingrese ubicación" />
+                                         placeholder="Ingrese el total" />
                         </div>
 
-                        <!-- Capacidad -->
+                        <!-- ID Usuario -->
                         <div class="col-12">
-                            <label for="capacidad" class="form-label fw-semibold">ID Usuario</label>
+                            <label for="idUsuario" class="form-label fw-semibold">ID Usuario</label>
                             <InputNumber @bind-Value="factura_Modelo_Peticion.idUsuario"
-                                   class="form-control form-control-lg shadow-sm"
+                                         class="form-control form-control-lg shadow-sm border-0 rounded-pill"
                                          id="idUsuario"
-                                   placeholder="Ingrese capacidad" />
+                                         placeholder="Ingrese el ID del usuario" />
                         </div>
-                        
-                        <hr />
+
+                        <hr class="my-4" />
 
                         <!-- Botones -->
                         <div class="col-12 text-center mt-4">
-                            <NavLink href="listaalmacenes"
-                                     class="btn btn-outline-secondary rounded-pill shadow-sm px-5 me-2">
+                            <NavLink href="Lista_Factura"
+                                     class="btn btn-outline-secondary rounded-pill shadow-sm px-5 me-2"
+                                     style="transition: 0.3s; border-width: 2px;">
                                 <i class="bi bi-backspace-fill me-2"></i> Volver
                             </NavLink>
 
                             <button type="submit"
-                                    class="btn btn-primary rounded-pill shadow-sm px-5">
+                                    class="btn btn-primary rounded-pill shadow-lg px-5"
+                                    style="background: linear-gradient(90deg, #1e3c72, #2a5298); border: none; transition: 0.3s;">
                                 <i class="bi bi-floppy-fill me-2"></i> Guardar
                             </button>
                         </div>
@@ -66,6 +69,7 @@
         </div>
     </div>
 </div>
+
 
 
 

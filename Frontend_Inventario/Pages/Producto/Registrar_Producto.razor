@@ -1,4 +1,4 @@
-﻿@page "/Registrar_Producto"
+﻿@page "/Registrar_Producto/{idProducto:int?}"
 @using Frontend_Inventario.Modelos
 @using Frontend_Inventario.Servicios
 @using Frontend_Inventario.Servicios.iServicios
@@ -119,14 +119,68 @@
 @code {
     private Producto_Modelo_Peticion producto_Modelo_Peticion { get; set; } = new Producto_Modelo_Peticion();
 
+    [Parameter]
+    public int? idProducto { get; set; }
+
     private async Task GuardarProducto()
     {
-        producto_Modelo_Peticion.proceso = 1; // Indicar que es un registro nuevo
-        producto_Modelo_Peticion.idProducto = 0; // 0 para crear nuevo producto
-        producto_Modelo_Peticion.margenGanancia = 0;
-        var respuesta = await servicioProducto.Crear_Producto(producto_Modelo_Peticion);
+        if(producto_Modelo_Peticion.idProducto > 0)
+        {
+            producto_Modelo_Peticion.proceso = 2;            
+            var respuesta = await servicioProducto.Editar_Producto(producto_Modelo_Peticion);
+        }else
+        {
+            producto_Modelo_Peticion.proceso = 1;
+            producto_Modelo_Peticion.idProducto = 0;
+            producto_Modelo_Peticion.margenGanancia = 0;
+            var respuesta = await servicioProducto.Crear_Producto(producto_Modelo_Peticion);
+        }        
         // Navegar de vuelta a la lista de productos después de guardar
         navigationManager.NavigateTo("Lista_Producto");
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        if(idProducto.HasValue && idProducto.Value > 0)
+        {
+            var response = await servicioProducto.Get_Producto_ID(idProducto.Value);
+            if(response != null)
+            {
+                producto_Modelo_Peticion.idProducto = response.ContainsKey("idProducto")
+                ? Convert.ToInt32(response["idProducto"])
+                : 0;
+                producto_Modelo_Peticion.nombre = response.ContainsKey("nombre")
+                ? response["nombre"]?.ToString()
+                : string.Empty;
+                producto_Modelo_Peticion.descripcion = response.ContainsKey("descripcion")
+                ? response["descripcion"]?.ToString()
+                : string.Empty;
+                producto_Modelo_Peticion.precioCompra = response.ContainsKey("precioCompra")
+                ? Convert.ToDecimal(response["precioCompra"])
+                : 0;
+                producto_Modelo_Peticion.precioVenta = response.ContainsKey("precioVenta")
+                ? Convert.ToDecimal(response["precioVenta"])
+                : 0;
+                producto_Modelo_Peticion.margenGanancia = response.ContainsKey("margenGanancia")
+                ? Convert.ToInt32(response["margenGanancia"])
+                : 0;
+                producto_Modelo_Peticion.stockActual = response.ContainsKey("stockActual")
+                ? Convert.ToInt32(response["stockActual"])
+                : 0;
+                producto_Modelo_Peticion.stockMinimo = response.ContainsKey("stockMinimo")
+                ? Convert.ToInt32(response["stockMinimo"])
+                : 0;
+                producto_Modelo_Peticion.idCategoria = response.ContainsKey("idCategoria")
+                ? Convert.ToInt32(response["idCategoria"])
+                : 0;
+                producto_Modelo_Peticion.idProveedor = response.ContainsKey("idProveedor")
+                ? Convert.ToInt32(response["idProveedor"])
+                : 0;
+            }
+            else
+            {
+                Console.WriteLine("No se encontró el producto con el ID proporcionado.");
+            }
+        }
+    }
 }

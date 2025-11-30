@@ -1,0 +1,133 @@
+﻿@page "/Registrar_Movimiento/{idMovimiento:int?}"
+@using Frontend_Inventario.Modelos
+@using Frontend_Inventario.Servicios
+@using Frontend_Inventario.Servicios.iServicios
+
+@inject Movimiento_Interface servicioMovimiento
+@inject NavigationManager navigationManager
+
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg rounded-4 border-0">
+
+                <!-- Header -->
+                <div class="card-header bg-gradient-info text-center rounded-top-4">
+                    <h4 class="mb-0 text-dark">Registro de Movimiento</h4>
+                </div>
+
+                <div class="card-body p-5">
+                    <EditForm Model="movimiento_Modelo_Peticion" OnValidSubmit="@(()=> GuardarMovimiento())" class="row g-4">
+
+                        <!-- Producto -->
+                        <div class="col-md-6">
+                            <label for="Producto" class="form-label fw-semibold">Producto</label>
+                            <InputNumber
+                                @bind-Value="movimiento_Modelo_Peticion.idProducto" class="form-control form-control-lg shadow-sm"
+                                   id="Producto"
+                                   placeholder="Ingrese el producto" />
+                        </div>
+
+                        <!-- Movimiento -->
+                        <div class="col-md-6">
+                            <label for="Movimiento" class="form-label fw-semibold">Movimiento</label>
+                            <InputText @bind-Value="movimiento_Modelo_Peticion.tipoMovimiento" class="form-control form-control-lg shadow-sm"
+                                   id="Movimiento"
+                                   placeholder="Ingrese el tipo de movimiento" />
+                        </div>
+
+                        <!-- Cantidad -->
+                        <div class="col-12">
+                            <label for="Cantidad" class="form-label fw-semibold">Cantidad</label>
+                            <InputNumber @bind-Value="movimiento_Modelo_Peticion.cantidad" class="form-control form-control-lg shadow-sm"
+                                   id="Cantidad"
+                                   placeholder="Ingrese la cantidad" />
+                        </div>
+
+                        <!-- Usuario -->
+                        <div class="col-12">
+                            <label for="IdUsuario" class="form-label fw-semibold">ID Usuario</label>
+                            <InputNumber @bind-Value="movimiento_Modelo_Peticion.idUsuario" class="form-control form-control-lg shadow-sm"
+                                   id="IdUsuario"
+                                   placeholder="Ingrese el ID del usuario" />
+                        </div>
+
+                        <hr />
+
+                        <!-- Botones -->
+                        <div class="col-12 text-center mt-4">
+                            <NavLink href="Lista_Movimiento"
+                               class="btn btn-outline-secondary rounded-pill shadow-sm px-5 me-2">
+                                <i class="bi bi-backspace-fill me-2"></i> Volver
+                            </NavLink>
+
+                            <button type="submit"
+                                    class="btn btn-primary rounded-pill shadow-sm px-5">
+                                <i class="bi bi-floppy-fill me-2"></i> Guardar
+                            </button>
+                        </div>
+
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private Movimiento_Modelo_Peticion movimiento_Modelo_Peticion { get; set; } = new Movimiento_Modelo_Peticion();
+
+    [Parameter]
+    public int? idMovimiento { get; set; }
+
+    private async Task GuardarMovimiento()
+    {
+        if (movimiento_Modelo_Peticion.idMovimiento > 0)
+        {
+            movimiento_Modelo_Peticion.proceso = 2;
+            var respuesta = await servicioMovimiento.Editar_Movimiento(movimiento_Modelo_Peticion);
+        }
+        else
+        {
+            movimiento_Modelo_Peticion.proceso = 1; // Indicar que es un registro nuevo
+            movimiento_Modelo_Peticion.idMovimiento = 0; // 0 para crear nuevo movimiento
+            var respuesta = await servicioMovimiento.Crear_Movimiento(movimiento_Modelo_Peticion);
+        }      
+        navigationManager.NavigateTo("Lista_Movimiento");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (idMovimiento.HasValue && idMovimiento.Value > 0)
+        {
+            var response = await servicioMovimiento.Get_Movimiento_Id(idMovimiento.Value);
+            if (response != null)
+            {
+                movimiento_Modelo_Peticion.idMovimiento = response.ContainsKey("idMovimiento")
+                ? Convert.ToInt32(response["idMovimiento"])
+                : 0;
+
+                movimiento_Modelo_Peticion.idProducto = response.ContainsKey("idProducto")
+                ? Convert.ToInt32(response["idProducto"])
+                : 0;
+
+                movimiento_Modelo_Peticion.tipoMovimiento = response.ContainsKey("tipoMovimiento")
+                ? response["tipoMovimiento"]?.ToString()
+                : string.Empty;
+
+                movimiento_Modelo_Peticion.cantidad = response.ContainsKey("cantidad")
+                ? Convert.ToInt32(response["cantidad"])
+                : 0;
+
+                movimiento_Modelo_Peticion.idUsuario = response.ContainsKey("idUsuario")
+                ? Convert.ToInt32(response["idUsuario"])
+                : 0;
+            }
+            else
+            {
+                Console.WriteLine("No se encontró el movimiento con el ID proporcionado.");
+            }
+        }
+    }
+}

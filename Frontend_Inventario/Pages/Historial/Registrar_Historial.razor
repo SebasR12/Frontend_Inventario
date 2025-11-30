@@ -1,0 +1,133 @@
+﻿@page "/Registrar_Historial/{idHistorial:int?}"
+@using Frontend_Inventario.Modelos
+@using Frontend_Inventario.Servicios
+@using Frontend_Inventario.Servicios.iServicios
+
+@inject Historial_Interface servicioHistorial
+@inject NavigationManager navigationManager
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg rounded-4 border-0">
+                <!-- Header -->
+                <div class="card-header bg-gradient-info text-center rounded-top-4">
+                    <h4 class="mb-0 text-dark">Registro de Historial</h4>
+                </div>
+
+                
+                <div class="card-body p-5">
+                    <EditForm Model="historial_Modelo_Peticion" OnValidSubmit="@(()=>GuardarHistorial())" class="row g-4">
+
+                        <!-- idHistorial -->
+                        <div class="col-md-6">
+                            <label for="idHistorial" class="form-label fw-semibold">ID Historial</label>
+                            <InputNumber @bind-Value="historial_Modelo_Peticion.idHistorial"
+                                         class="form-control form-control-lg shadow-sm"
+                                         id="idHistorial"
+                                         placeholder="Ingrese ID del historial"
+                                         disabled="@isDisabled" />
+                        </div>
+
+                        <!-- idProducto -->
+                        <div class="col-md-6">
+                            <label for="idProducto" class="form-label fw-semibold">ID Producto</label>
+                            <InputNumber @bind-Value="historial_Modelo_Peticion.idProducto" class="form-control form-control-lg shadow-sm"
+                                   id="idProducto"
+                                   placeholder="Ingrese ID del producto" />
+                        </div>
+
+                        <!-- precioCompra -->
+                        <div class="col-12">
+                            <label for="precioCompra" class="form-label fw-semibold">Precio Compra</label>
+                            <InputNumber @bind-Value="historial_Modelo_Peticion.precioCompra" class="form-control form-control-lg shadow-sm"
+                                   id="precioCompra"
+                                   placeholder="Ingrese precio de compra" />
+                        </div>
+
+                        <!-- precioVenta -->
+                        <div class="col-12">
+                            <label for="precioVenta" class="form-label fw-semibold">Precio Venta</label>
+                            <InputNumber @bind-Value="historial_Modelo_Peticion.precioVenta" class="form-control form-control-lg shadow-sm"
+                                   id="precioVenta"
+                                   placeholder="Ingrese precio de venta" />
+                        </div>
+
+                        <hr />
+
+                        <!-- Botones -->
+                        <div class="col-12 text-center mt-4">
+                            <NavLink href="Lista_Historial"
+                               class="btn btn-outline-secondary rounded-pill shadow-sm px-5 me-2">
+                                <i class="bi bi-backspace-fill me-2"></i> Volver
+                            </NavLink>
+
+                            <button type="submit"
+                                    class="btn btn-primary rounded-pill shadow-sm px-5">
+                                <i class="bi bi-floppy-fill me-2"></i> Guardar
+                            </button>
+                        </div>
+
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>
+
+@code 
+{
+    private Historial_Modelo_Peticion historial_Modelo_Peticion { get; set; } = new Historial_Modelo_Peticion();
+
+    [Parameter]
+    public int? idHistorial { get; set; }
+
+    private bool isDisabled = true; // Cambia a false para habilitar
+
+    private async Task GuardarHistorial()
+    {
+        if (historial_Modelo_Peticion.idHistorial>0)
+        {
+            historial_Modelo_Peticion.proceso = 2; // 1 para crear, 2 para actualizar
+            var respuesta = await servicioHistorial.Editar_Historial(historial_Modelo_Peticion);
+        }
+        else
+        {
+            historial_Modelo_Peticion.proceso = 1; // 1 para crear, 2 para actualizar
+            historial_Modelo_Peticion.idHistorial = 0; // En crear, el id es 0
+            var respuesta = await servicioHistorial.Crear_Historial(historial_Modelo_Peticion);
+        }
+        navigationManager.NavigateTo("Lista_Historial");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (idHistorial.HasValue && idHistorial.Value > 0)
+        {
+            var response = await servicioHistorial.Get_Historial_Id(idHistorial.Value);
+            if(response != null)
+            {
+                historial_Modelo_Peticion.idHistorial = response.ContainsKey("idHistorial")
+                ? Convert.ToInt32(response["idHistorial"])
+                : 0;
+
+                historial_Modelo_Peticion.idProducto = response.ContainsKey("idProducto")
+                ? Convert.ToInt32(response["idProducto"])
+                : 0;
+
+                historial_Modelo_Peticion.precioCompra = response.ContainsKey("precioCompra")
+                ? Convert.ToDecimal(response["precioCompra"])
+                : 0;
+
+                historial_Modelo_Peticion.precioVenta = response.ContainsKey("precioVenta")
+                ? Convert.ToDecimal(response["precioVenta"])
+                : 0;
+
+            }
+            else
+            {
+                Console.WriteLine("No se encontró el historial con el ID proporcionado.");
+            }
+        }
+    }
+}

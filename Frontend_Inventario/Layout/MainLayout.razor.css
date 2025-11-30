@@ -18,13 +18,43 @@
     background: linear-gradient(90deg, #141e30, #243b55);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
     color: #fff;
     font-size: 1.6rem;
     font-weight: 600;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
     z-index: 10;
 }
+
+    /* Logo */
+    .topbar .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+    }
+
+/* Botón Salir premium */
+.logout-btn {
+    border: none;
+    padding: 0.45rem 1rem;
+    background: linear-gradient(90deg, #f43f5e, #e11d48);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 8px rgba(244, 63, 94, 0.4);
+    transition: all 0.25s ease;
+}
+
+    .logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(244, 63, 94, 0.6);
+    }
 
 /* === SIDEBAR === */
 .sidebar {
@@ -34,13 +64,13 @@
     width: 80px;
     height: calc(100vh - 60px);
     background: rgba(20, 30, 48, 0.95);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
     transition: width 0.3s ease-in-out, background 0.3s ease-in-out;
     overflow-x: hidden;
-    box-shadow: 3px 0 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 3px 0 12px rgba(0, 0, 0, 0.35);
+    border-right: 1px solid rgba(108,180,255,0.2);
 }
 
-    /* Se expande al pasar el mouse */
     .sidebar:hover {
         width: 220px;
         background: rgba(36, 59, 85, 0.98);
@@ -62,7 +92,8 @@
     color: #ccc;
     text-decoration: none;
     font-size: 1rem;
-    transition: all 0.25s ease;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
     .nav-item i {
@@ -105,16 +136,16 @@
     transition: margin-left 0.3s ease-in-out;
 }
 
-/* Ajusta cuando el menú se expande */
 .sidebar:hover ~ .main-content {
     margin-left: 220px;
 }
 
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
+
+    /* Sidebar oculto al inicio */
     .sidebar {
-        position: fixed;
-        left: -80px;
+        left: -220px;
     }
 
         .sidebar:hover {
@@ -128,5 +159,11 @@
 
     .sidebar:hover ~ .main-content {
         margin-left: 220px;
+    }
+
+    /* Ajuste del botón logout */
+    .topbar .logout-btn {
+        font-size: 0.9rem;
+        padding: 0.35rem 0.8rem;
     }
 }

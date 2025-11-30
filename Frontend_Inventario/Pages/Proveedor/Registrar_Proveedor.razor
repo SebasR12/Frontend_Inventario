@@ -136,8 +136,8 @@
                 ? response["telefono"].ToString()
                 : string.Empty;
 
-                proveedor_Modelo_Peticion.correo = response.ContainsKey("telefono")
-                ? response["telefono"].ToString()
+                proveedor_Modelo_Peticion.correo = response.ContainsKey("correo")
+                ? response["correo"].ToString()
                 : string.Empty;
 
                 proveedor_Modelo_Peticion.direccion = response.ContainsKey("direccion")
