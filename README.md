@@ -1,32 +1,33 @@
-# 🎨 SistemaInventario Frontend
+# 🎨 SistemaInventario Frontend (Blazor)
 
 ![Status](https://img.shields.io/badge/Status-Activo-brightgreen?style=flat-square)
-![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)
-![Tailwind](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
+![Blazor](https://img.shields.io/badge/Blazor-512BD4?style=flat-square&logo=.net&logoColor=white)
+![UI](https://img.shields.io/badge/Bootstrap-7952B3?style=flat-square&logo=bootstrap&logoColor=white)
 
-Interfaz de usuario moderna y responsiva para la gestión de inventarios. Este proyecto es el cliente oficial que consume los servicios de la **[SistemaInventario API](https://github.com/SebasR12/SistemaInventario_API)**.
+Interfaz de usuario moderna desarrollada con **Blazor**, diseñada para la gestión integral de inventarios. Este cliente consume de forma asíncrona la **[SistemaInventario API](https://github.com/SebasR12/SistemaInventario_API)**.
 
 ---
 
 ## 🚀 Funcionalidades
-* 📦 **Gestión de Catálogo:** Visualización, edición y filtrado de productos.
-* 📥 **Control de Stock:** Registro rápido de entradas y salidas de mercancía.
-* 📱 **Diseño Responsive:** Interfaz adaptada para móviles y escritorio.
-* ⚡ **Consumo Asíncrono:** Manejo eficiente de peticiones HTTP con Axios.
+* 📦 **Gestión de Catálogo:** CRUD de productos con componentes Razor reutilizables.
+* 📥 **Control de Stock:** Registro de entradas y salidas con validación en tiempo real.
+* 📱 **Diseño Responsivo:** Interfaz adaptada a escritorio y móviles.
+* ⚡ **Full Stack C#:** Lógica de cliente y servidor unificada bajo el ecosistema .NET.
 
 ---
 
 ## 🛠️ Stack Tecnológico
-* **Core:** React.js + Vite.
-* **Estilos:** Tailwind CSS.
-* **Comunicación:** Axios (Conexión con el Backend .NET).
-* **Iconos:** Lucide React.
+* **Framework:** Blazor (WebAssembly / Server).
+* **Lenguaje:** C# / Razor Pages.
+* **Estilos:** Bootstrap / CSS3.
+* **Comunicación:** HttpClient (JSON Deserialization).
 
 ---
 
 ## 🏗️ Estructura del Proyecto
-* **`/src/components`** → Elementos UI reutilizables.
-* **`/src/services`** → Conexión directa con la API de .NET.
-* **`/src/pages`** → Vistas principales (Dashboard, Inventario).
+* **`/Pages`** → Vistas principales de la aplicación (Index, Inventario, Movimientos).
+* **`/Shared`** → Componentes reutilizables (NavMenu, MainLayout, Modales).
+* **`/Services`** → Clientes HTTP para la comunicación con la API de .NET.
+* **`/Models`** → DTOs y clases de datos compartidas.
 
 ---
