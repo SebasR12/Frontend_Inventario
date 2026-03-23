@@ -49,6 +49,7 @@ builder.Services.AddScoped<Factura_Interface, Factura_Servicio>();
 builder.Services.AddScoped<Movimiento_Interface, Movimiento_Servicio>();
 builder.Services.AddScoped<Historial_Interface, Historial_Servicio>();
 builder.Services.AddScoped<Rol_Interface, Rol_Servicio>();
+builder.Services.AddScoped<Categoria_Interface, Categoria_Servicio>();
 
 builder.Services.AddAuthorizationCore();
 

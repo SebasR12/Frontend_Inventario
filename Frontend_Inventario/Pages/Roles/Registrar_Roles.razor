@@ -64,7 +64,7 @@
 
     private async Task GuardarRol()
     {
-        if (rol_Modelo_Peticion.idRol>0)
+        if (rol_Modelo_Peticion.idRol > 0)
         {
             rol_Modelo_Peticion.proceso = 2; // Asignar el valor adecuado para el proceso de actualización
             var respuesta = await servicioRol.Editar_Rol(rol_Modelo_Peticion);

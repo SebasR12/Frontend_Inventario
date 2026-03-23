@@ -13,7 +13,6 @@
         public int idCategoria { get; set; }
         public int idProveedor{ get; set; }
 
-
     }
     public class Producto_Modelo_Peticion
     {

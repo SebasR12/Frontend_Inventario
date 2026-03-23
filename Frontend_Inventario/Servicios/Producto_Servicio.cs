@@ -19,47 +19,26 @@ namespace Frontend_Inventario.Servicios
 
             var content = await respuesta.Content.ReadAsStringAsync();
 
-            var Get_Producto = JsonConvert.DeserializeObject<IEnumerable<Producto_Modelo_Respuesta>>(content);
-        
-            return Get_Producto;
+            var productos = JsonConvert.DeserializeObject<IEnumerable<Producto_Modelo_Respuesta>>(content);
+
+            return productos;
         }
 
         public async Task<Dictionary<string, object>> Get_Producto_ID(int idProducto)
         {
             var response = await _httpClient.GetStringAsync($"https://localhost:7005/api/Producto/{idProducto}");
 
-            var Get_Producto = JsonConvert.DeserializeObject<Dictionary<string, object>>(response);
-            
-            return Get_Producto;
+            var producto = JsonConvert.DeserializeObject<Dictionary<string, object>>(response);
+
+            return producto;
         }
 
         public async Task<Producto_Modelo_Peticion> Crear_Producto(Producto_Modelo_Peticion producto)
         {
             var content = JsonConvert.SerializeObject(producto);
+            var bodyContent = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
 
-            var BodyContent = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync("https://localhost:7005/api/Producto", BodyContent);
-
-            if (response.IsSuccessStatusCode) 
-            {
-                var contenidoRespuesta = await response.Content.ReadAsStringAsync();
-                var resultado = JsonConvert.DeserializeObject<Producto_Modelo_Peticion>(contenidoRespuesta);
-                return resultado;
-            }
-            else 
-            {
-                throw new Exception($"Error al crear: {response.ReasonPhrase}");
-            }
-        }
-
-        public async Task<Producto_Modelo_Peticion> Editar_Producto(Producto_Modelo_Peticion producto)
-        {
-            var content = JsonConvert.SerializeObject(producto);
-
-            var BodyContent = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PutAsync("https://localhost:7005/api/Producto", BodyContent);
+            var response = await _httpClient.PostAsync("https://localhost:7005/api/Producto", bodyContent);
 
             if (response.IsSuccessStatusCode)
             {
@@ -69,7 +48,26 @@ namespace Frontend_Inventario.Servicios
             }
             else
             {
-                throw new Exception($"Error al crear: {response.ReasonPhrase}");
+                throw new Exception($"Error al crear producto: {response.ReasonPhrase}");
+            }
+        }
+
+        public async Task<Producto_Modelo_Peticion> Editar_Producto(Producto_Modelo_Peticion producto)
+        {
+            var content = JsonConvert.SerializeObject(producto);
+            var bodyContent = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync("https://localhost:7005/api/Producto", bodyContent);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var contenidoRespuesta = await response.Content.ReadAsStringAsync();
+                var resultado = JsonConvert.DeserializeObject<Producto_Modelo_Peticion>(contenidoRespuesta);
+                return resultado;
+            }
+            else
+            {
+                throw new Exception($"Error al editar producto: {response.ReasonPhrase}");
             }
         }
 
@@ -77,14 +75,7 @@ namespace Frontend_Inventario.Servicios
         {
             var response = await _httpClient.DeleteAsync($"https://localhost:7005/api/Producto/{idProducto}");
 
-            if (response.IsSuccessStatusCode)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return response.IsSuccessStatusCode;
         }
     }
 }

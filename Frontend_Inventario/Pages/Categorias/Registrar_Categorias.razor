@@ -1,0 +1,109 @@
+﻿@page "/Registrar_Categorias/{idCategoria:int?}"
+@using Frontend_Inventario.Modelos
+@using Frontend_Inventario.Servicios
+@using Frontend_Inventario.Servicios.iServicios
+
+@inject Categoria_Interface servicioCategoria
+@inject NavigationManager navigationManager
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg rounded-4 border-0">
+                <!-- Header con texto negro -->
+                <div class="card-header bg-gradient-info text-center rounded-top-4">
+                    <h4 class="mb-0 text-dark">Registro de Categoria</h4>
+                </div>
+
+                <div class="card-body p-5">
+                    <EditForm Model="categoria_Modelo_Peticion" OnValidSubmit="@(()=>GuardarCategoria())" class="row g-4">
+
+                        <!-- Nombre -->
+                        <div class="col-md-6">
+                            <label for="nombre" class="form-label fw-semibold">Nombre</label>
+                            <InputText @bind-Value="categoria_Modelo_Peticion.nombre" class="form-control form-control-lg shadow-sm"
+                                   id="nombre"
+                                   placeholder="Ingrese nombre"/>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="col-md-6">
+                            <label for="descripcion" class="form-label fw-semibold">Descripción</label>
+                            <InputText @bind-Value="categoria_Modelo_Peticion.descripcion" class="form-control form-control-lg shadow-sm"
+                                   id="descripcion"
+                                   placeholder="Ingrese descripción"/>
+                        </div>
+
+                        <hr />
+
+                        <!-- Botones -->
+                        <div class="col-12 text-center mt-4">
+                            <a href="Lista_Categoria"
+                               class="btn btn-outline-secondary rounded-pill shadow-sm px-5 me-2">
+                                <i class="bi bi-backspace-fill me-2"></i> Volver
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary rounded-pill shadow-sm px-5">
+                                <i class="bi bi-floppy-fill me-2"></i> Guardar
+                            </button>
+                        </div>
+
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private Categoria_Modelo_Peticion categoria_Modelo_Peticion = new Categoria_Modelo_Peticion();
+
+    [Parameter]
+    public int? idCategoria { get; set; }
+
+    private async Task GuardarCategoria()
+    {
+        if(categoria_Modelo_Peticion.idCategoria > 0)
+        {
+            categoria_Modelo_Peticion.proceso = 2; // 1 para crear, 2 para actualizar
+            var respuesta = await servicioCategoria.Editar_Categoria(categoria_Modelo_Peticion);
+        }
+        else
+        {
+            categoria_Modelo_Peticion.proceso = 1; // 1 para crear, 2 para actualizar
+            categoria_Modelo_Peticion.idCategoria = 0;
+            var respuesta = await servicioCategoria.Crear_Categoria(categoria_Modelo_Peticion);
+        }        
+        navigationManager.NavigateTo("Lista_Categoria");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (idCategoria.HasValue && idCategoria.Value > 0)
+        {
+            var response = await servicioCategoria.Get_Categoria_Id(idCategoria.Value);
+            if (response != null)
+            {
+                categoria_Modelo_Peticion.idCategoria = response.ContainsKey("idCategoria") 
+                ? Convert.ToInt32(response["idCategoria"]) 
+                : 0;
+
+                categoria_Modelo_Peticion.nombre = response.ContainsKey("nombre")
+                ? response["nombre"]?.ToString()
+                : string.Empty;
+
+                categoria_Modelo_Peticion.descripcion = response.ContainsKey("descripcion")
+                ? response["descripcion"]?.ToString()
+                : string.Empty;
+
+            }
+            else
+            {
+                Console.WriteLine("No se encontró la categoría con el ID proporcionado.");
+            }
+        }
+    }
+
+}
+
